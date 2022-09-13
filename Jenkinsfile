@@ -24,9 +24,9 @@ pipeline {
   stage('Docker Build and Tag') {
            steps {
               
-                sh 'docker build -t samplewebapp:latest .' 
-                sh 'docker tag samplewebapp nikhilnidhi/samplewebapp:latest'
-                //sh 'docker tag samplewebapp nikhilnidhi/samplewebapp:$BUILD_NUMBER'
+                sh 'docker build -t docker-project:latest .' 
+                sh 'docker tag samplewebapp shubbamshrmali/docker-project:latest'
+                //sh 'docker tag samplewebapp shubbamshrmali/docker-project:$BUILD_NUMBER'
                
           }
         }
@@ -34,9 +34,9 @@ pipeline {
   stage('Publish image to Docker Hub') {
           
             steps {
-        withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
-          sh  'docker push nikhilnidhi/samplewebapp:latest'
-        //  sh  'docker push nikhilnidhi/samplewebapp:$BUILD_NUMBER' 
+        withDockerRegistry([ credentialsId: "dockerHub", url: https://hub.docker.com/repository/docker/shubbamshrmali/docker-project ]) {
+          sh  'docker push shubbamshrmali/docker-project:latest'
+        //  sh  'docker push shubbamshrmali/docker-project:$BUILD_NUMBER' 
         }
                   
           }
@@ -46,14 +46,14 @@ pipeline {
              
             steps 
 			{
-                sh "docker run -d -p 8003:8080 nikhilnidhi/samplewebapp"
+                sh "docker run -d -p 8003:8080 shubbamshrmali/docker-project"
  
             }
         }
  stage('Run Docker container on remote hosts') {
              
             steps {
-                sh "docker -H ec2-user@34.205.16.228run -d -p 8003:8080 nikhilnidhi/samplewebapp"
+                sh "docker -H ec2-user@3.84.124.42run -d -p 8003:8080 shubbamshrmali/docker-project"
  
             }
         }
